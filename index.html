@@ -81,42 +81,10 @@
         {
             generation: 7,
             members: [
-                { name: "Carl Friederich Maurer", birth: 1824, death: 1891 },
+                { name: "Carl Friederich Maurer", birth: 1824, death: 1891, parents: ["Johann Ulrich Maurer", "Magdalena Andres"] },
                 { name: "Rosalie Giaque", birth: 1822, death: 1897 },
-                { name: "Richard Goldsworthy", birth: 1809, death: 1864 },
+                { name: "Richard Goldsworthy", birth: 1809, death: 1864, parents: ["John Goldsworthy", "Mary Battrall"] },
                 { name: "Jane Magor", birth: 1816, death: 1877 }
-            ]
-        },
-        {
-            generation: 6,
-            members: [
-                { name: "Fritz Anatole Maurer", birth: 1855, death: 1901 },
-                { name: "Elizabeth Lamont", birth: 1858, death: 1889 },
-                { name: "Christopher Rodda Goldsworthy", birth: 1877, death: 1925 },
-                { name: "Clara Jane Powell", birth: 1884, death: 1968 }
-            ]
-        },
-        {
-            generation: 5,
-            members: [
-                { name: "Albert Jules Maurer" },
-                { name: "Sarah Francis Ingleton" },
-                { name: "Gwendoline Rodda Goldsworthy" },
-                { name: "William Samuel Hatherly" }
-            ]
-        },
-        {
-            generation: 4,
-            members: [
-                { name: "John Eric Maurer" },
-                { name: "Mavis Rice" }
-            ]
-        },
-        {
-            generation: 3,
-            members: [
-                { name: "Sue Hatherly" },
-                { name: "John Maurer" }
             ]
         }
     ]
@@ -128,12 +96,23 @@ function renderFamilyTree(tree) {
     
     tree.generations.forEach(gen => {
         let genDiv = document.createElement("div");
+        genDiv.classList.add("generation");
         genDiv.innerHTML = `<h3>Generation ${gen.generation}</h3>`;
         
         gen.members.forEach(member => {
-            let memberDiv = document.createElement("p");
+            let memberDiv = document.createElement("div");
+            memberDiv.classList.add("member");
             memberDiv.textContent = `${member.name} (B. ${member.birth || '?'}, D. ${member.death || '?'})`;
             genDiv.appendChild(memberDiv);
+            
+            if (member.parents) {
+                member.parents.forEach(parentName => {
+                    let line = document.createElement("div");
+                    line.classList.add("line");
+                    line.textContent = `↳ Child of ${parentName}`;
+                    memberDiv.appendChild(line);
+                });
+            }
         });
         
         container.appendChild(genDiv);
@@ -143,6 +122,16 @@ function renderFamilyTree(tree) {
 document.addEventListener("DOMContentLoaded", function() {
     renderFamilyTree(familyTree);
 });
+
+// CSS to style tree with lines
+const style = document.createElement("style");
+style.innerHTML = `
+    #family-tree { font-family: Arial, sans-serif; }
+    .generation { margin: 20px 0; }
+    .member { padding: 5px; border: 1px solid #000; display: inline-block; margin: 5px; position: relative; }
+    .line { font-size: 12px; color: gray; }
+`;
+document.head.appendChild(style);
 
 		</script>
         
