@@ -64,8 +64,87 @@
         <h2>Then vs. Now</h2>
         <p>Me and Ben off to camping 2014 vs. Great Granny on her honeymoon, 1953 (colourised)...</p>
         
-        <h2>Family Tree</h2>
-        <p>8th Generation: Johann Ulrich Maurer B.1791...</p>
+        <div id="family-tree"></div>
+		<script>
+			const familyTree = {
+    name: "Family Tree",
+    generations: [
+        {
+            generation: 8,
+            members: [
+                { name: "Johann Ulrich Maurer", birth: 1791 },
+                { name: "Magdalena Andres", birth: 1796, death: 1871 },
+                { name: "John Goldsworthy", birth: 1785, death: 1843 },
+                { name: "Mary Battrall", birth: 1783, death: 1851 }
+            ]
+        },
+        {
+            generation: 7,
+            members: [
+                { name: "Carl Friederich Maurer", birth: 1824, death: 1891 },
+                { name: "Rosalie Giaque", birth: 1822, death: 1897 },
+                { name: "Richard Goldsworthy", birth: 1809, death: 1864 },
+                { name: "Jane Magor", birth: 1816, death: 1877 }
+            ]
+        },
+        {
+            generation: 6,
+            members: [
+                { name: "Fritz Anatole Maurer", birth: 1855, death: 1901 },
+                { name: "Elizabeth Lamont", birth: 1858, death: 1889 },
+                { name: "Christopher Rodda Goldsworthy", birth: 1877, death: 1925 },
+                { name: "Clara Jane Powell", birth: 1884, death: 1968 }
+            ]
+        },
+        {
+            generation: 5,
+            members: [
+                { name: "Albert Jules Maurer" },
+                { name: "Sarah Francis Ingleton" },
+                { name: "Gwendoline Rodda Goldsworthy" },
+                { name: "William Samuel Hatherly" }
+            ]
+        },
+        {
+            generation: 4,
+            members: [
+                { name: "John Eric Maurer" },
+                { name: "Mavis Rice" }
+            ]
+        },
+        {
+            generation: 3,
+            members: [
+                { name: "Sue Hatherly" },
+                { name: "John Maurer" }
+            ]
+        }
+    ]
+};
+
+function renderFamilyTree(tree) {
+    let container = document.getElementById("family-tree");
+    container.innerHTML = "<h2>Family Tree</h2>";
+    
+    tree.generations.forEach(gen => {
+        let genDiv = document.createElement("div");
+        genDiv.innerHTML = `<h3>Generation ${gen.generation}</h3>`;
+        
+        gen.members.forEach(member => {
+            let memberDiv = document.createElement("p");
+            memberDiv.textContent = `${member.name} (B. ${member.birth || '?'}, D. ${member.death || '?'})`;
+            genDiv.appendChild(memberDiv);
+        });
+        
+        container.appendChild(genDiv);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    renderFamilyTree(familyTree);
+});
+
+		</script>
         
         <h2>My Items</h2>
         <h3>Adams Family Reunion</h3>
