@@ -4,19 +4,48 @@ const familyTree = {
         {
             generation: 8,
             members: [
-                { name: "Johann Ulrich Maurer", birth: 1791, info: "Married Magdalena Andres on 10/7/1816 in La Neuveville, Berne, Switzerland." },
+                { name: "Johann Ulrich Maurer", birth: 1791 },
                 { name: "Magdalena Andres", birth: 1796, death: 1871 },
-                { name: "John Goldsworthy", birth: 1785, death: 1843, info: "Married Mary Battrall on 11/11/1805 in Camborne, Cornwall, England." },
+                { name: "John Goldsworthy", birth: 1785, death: 1843 },
                 { name: "Mary Battrall", birth: 1783, death: 1851 }
             ]
         },
         {
             generation: 7,
             members: [
-                { name: "Carl Friederich Maurer", birth: 1824, death: 1891, parents: ["Johann Ulrich Maurer", "Magdalena Andres"], info: "Emigrated to Australia, arriving before Rosalie, who landed in Melbourne on 24/12/1869." },
+                { name: "Carl Friederich Maurer", birth: 1824, death: 1891, parents: ["Johann Ulrich Maurer", "Magdalena Andres"] },
                 { name: "Rosalie Giaque", birth: 1822, death: 1897 },
-                { name: "Richard Goldsworthy", birth: 1809, death: 1864, parents: ["John Goldsworthy", "Mary Battrall"], info: "Married Mary McCormick in 1833, then Elizabeth in 1846, and later Jane Magor in 1847." },
+                { name: "Richard Goldsworthy", birth: 1809, death: 1864, parents: ["John Goldsworthy", "Mary Battrall"] },
                 { name: "Jane Magor", birth: 1816, death: 1877 }
+            ]
+        },
+        {
+            generation: 6,
+            members: [
+                { name: "Fritz Anatole Maurer", birth: 1855, death: 1901, parents: ["Carl Friederich Maurer", "Rosalie Giaque"] },
+                { name: "Elizabeth Lamont", birth: 1858, death: 1889 },
+                { name: "Alice Annie Schwab" },
+                { name: "Christopher Rodda Goldsworthy", birth: 1877, death: 1925, parents: ["Richard Goldsworthy", "Jane Magor"] },
+                { name: "Clara Jane Powell", birth: 1884, death: 1968 }
+            ]
+        },
+        {
+            generation: 5,
+            members: [
+                { name: "Albert Jules Maurer", parents: ["Fritz Anatole Maurer", "Elizabeth Lamont"] },
+                { name: "Sarah Francis Ingleton" },
+                { name: "Muriel May Goldsworthy", parents: ["Christopher Rodda Goldsworthy", "Clara Jane Powell"] },
+                { name: "Nancy Jean Goldsworthy" },
+                { name: "Gwendoline Ronda Goldsworthy", birth: 1919, death: 1991 }
+            ]
+        },
+        {
+            generation: 4,
+            members: [
+                { name: "John Eric Maurer", parents: ["Albert Jules Maurer", "Sarah Francis Ingleton"] },
+                { name: "Mavis Rice" },
+                { name: "Sue Hatherly", parents: ["Gwendoline Ronda Goldsworthy"] },
+                { name: "John Maurer" }
             ]
         }
     ]
@@ -49,7 +78,7 @@ function renderFamilyTreeDiagram(tree) {
             rect.setAttribute("rx", "10");
             rect.setAttribute("ry", "10");
             rect.setAttribute("cursor", "pointer");
-            rect.addEventListener("click", () => alert(`${member.name}: B. ${member.birth || '?'} D. ${member.death || '?'}\n${member.info || ''}`));
+            rect.addEventListener("click", () => alert(`${member.name}: B. ${member.birth || '?'} D. ${member.death || '?'}`));
             
             let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
             text.setAttribute("x", xPosition + 75);
@@ -89,23 +118,6 @@ function renderFamilyTreeDiagram(tree) {
             }
         });
     });
-    
-    let defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
-    let marker = document.createElementNS("http://www.w3.org/2000/svg", "marker");
-    marker.setAttribute("id", "arrow");
-    marker.setAttribute("markerWidth", "10");
-    marker.setAttribute("markerHeight", "10");
-    marker.setAttribute("refX", "5");
-    marker.setAttribute("refY", "5");
-    marker.setAttribute("orient", "auto");
-    
-    let arrow = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    arrow.setAttribute("d", "M0,0 L10,5 L0,10 Z");
-    arrow.setAttribute("fill", "black");
-    
-    marker.appendChild(arrow);
-    defs.appendChild(marker);
-    svg.appendChild(defs);
     
     container.appendChild(svg);
 }
