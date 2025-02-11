@@ -90,48 +90,69 @@
     ]
 };
 
-function renderFamilyTree(tree) {
+function renderFamilyTreeDiagram(tree) {
     let container = document.getElementById("family-tree");
     container.innerHTML = "<h2>Family Tree</h2>";
     
-    tree.generations.forEach(gen => {
-        let genDiv = document.createElement("div");
-        genDiv.classList.add("generation");
-        genDiv.innerHTML = `<h3>Generation ${gen.generation}</h3>`;
-        
+    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("width", "100%");
+    svg.setAttribute("height", "500px");
+    
+    let yOffset = 50;
+    let xOffset = 50;
+    let nodeMap = {};
+    
+    tree.generations.forEach((gen, genIndex) => {
+        let xPosition = xOffset;
         gen.members.forEach(member => {
-            let memberDiv = document.createElement("div");
-            memberDiv.classList.add("member");
-            memberDiv.textContent = `${member.name} (B. ${member.birth || '?'}, D. ${member.death || '?'})`;
-            genDiv.appendChild(memberDiv);
+            let group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect.setAttribute("x", xPosition);
+            rect.setAttribute("y", yOffset);
+            rect.setAttribute("width", "150");
+            rect.setAttribute("height", "50");
+            rect.setAttribute("fill", "lightblue");
+            rect.setAttribute("stroke", "black");
             
+            let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", xPosition + 10);
+            text.setAttribute("y", yOffset + 30);
+            text.textContent = member.name;
+            
+            group.appendChild(rect);
+            group.appendChild(text);
+            svg.appendChild(group);
+            
+            nodeMap[member.name] = { x: xPosition + 75, y: yOffset + 50 };
+            xPosition += 200;
+        });
+        yOffset += 100;
+    });
+    
+    tree.generations.forEach((gen) => {
+        gen.members.forEach(member => {
             if (member.parents) {
                 member.parents.forEach(parentName => {
-                    let line = document.createElement("div");
-                    line.classList.add("line");
-                    line.textContent = `↳ Child of ${parentName}`;
-                    memberDiv.appendChild(line);
+                    if (nodeMap[parentName]) {
+                        let line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", nodeMap[parentName].x);
+                        line.setAttribute("y1", nodeMap[parentName].y);
+                        line.setAttribute("x2", nodeMap[member.name].x);
+                        line.setAttribute("y2", nodeMap[member.name].y - 50);
+                        line.setAttribute("stroke", "black");
+                        svg.appendChild(line);
+                    }
                 });
             }
         });
-        
-        container.appendChild(genDiv);
     });
+    
+    container.appendChild(svg);
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    renderFamilyTree(familyTree);
+    renderFamilyTreeDiagram(familyTree);
 });
-
-// CSS to style tree with lines
-const style = document.createElement("style");
-style.innerHTML = `
-    #family-tree { font-family: Arial, sans-serif; }
-    .generation { margin: 20px 0; }
-    .member { padding: 5px; border: 1px solid #000; display: inline-block; margin: 5px; position: relative; }
-    .line { font-size: 12px; color: gray; }
-`;
-document.head.appendChild(style);
 
 		</script>
         
